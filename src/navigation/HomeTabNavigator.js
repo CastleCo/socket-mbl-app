@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 
-import { Header } from 'native-base';
+import { Header, Title } from 'native-base';
 
 import { MenuButton } from '../components';
 
@@ -15,11 +15,11 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator({
     Sockets   : { screen: SocketListScreen, },
-    Groups    : { screen: LinksScreen, },
-    Members   : { screen: SettingsScreen, },
+    Groups    : { screen: SocketListScreen, },
+    Members   : { screen: SocketListScreen, },
   },{
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.routeName}`,
+      headerTitle: (<Title>{navigation.state.routeName}</Title>),
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
         let iconName;
@@ -51,6 +51,7 @@ export default TabNavigator({
     }),
     header: Header,
     headerLeft: MenuButton,
+    headerRight: MenuButton,
     initialRouteName : 'Sockets',
     tabBarComponent: TabBarBottom,
     animationEnabled: true,

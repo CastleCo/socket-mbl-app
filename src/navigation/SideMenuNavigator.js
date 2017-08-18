@@ -9,16 +9,12 @@ import Colors from '../constants/Colors';
 import HomeTabNavigator from './HomeTabNavigator';
 
 import { MenuButton } from '../components';
-import { SideMenuScreen } from '../screens';
+import { SideMenuScreen, SettingsScreen } from '../screens';
 
 export default DrawerNavigator({
     Households  : { screen: HomeTabNavigator, },
-    Settings    : { screen: SideMenuScreen, },
+    Settings    : { screen: SettingsScreen, },
   },{
-    navigationOptions : ({ navigation }) => ({
-      title: `${navigation.state.routeName}`
-    }),
-    header: Header,
-    headerLeft: MenuButton,
+    header: null,
   }
 );
