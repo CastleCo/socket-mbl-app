@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { TabNavigator } from 'react-navigation';
 
 import { Header, Title } from 'native-base';
 
@@ -10,13 +10,10 @@ import { MenuButton } from '../components';
 import Colors from '../constants/Colors';
 
 import { SocketListScreen } from '../Sockets/screens';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator({
     Sockets   : { screen: SocketListScreen, },
     Groups    : { screen: SocketListScreen, },
-    Members   : { screen: SocketListScreen, },
   },{
     navigationOptions: ({ navigation }) => ({
       headerTitle: (<Title>{navigation.state.routeName}</Title>),
@@ -34,10 +31,10 @@ export default TabNavigator({
               ? `ios-albums${focused ? '' : '-outline'}`
               : 'md-albums';
             break;
-          case 'Members':
-            iconName = Platform.OS === 'ios'
-              ? `ios-people${focused ? '' : '-outline'}`
-              : 'md-people';
+          default:
+          iconName = Platform.OS === 'ios'
+            ? `ios-alert${focused ? '' : '-outline'}`
+            : 'md-alert';
         }
         return (
           <Ionicons
@@ -52,8 +49,7 @@ export default TabNavigator({
     header: Header,
     headerLeft: MenuButton,
     headerRight: MenuButton,
-    initialRouteName : 'Sockets',
-    tabBarComponent: TabBarBottom,
+    // initialRouteName : 'Sockets',
     animationEnabled: true,
     gesturesDisabled: true,
   }
