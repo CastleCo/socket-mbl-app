@@ -1,39 +1,39 @@
 import React from 'react';
-import { Slider } from 'react-native';
+import { Switch, Slider } from 'react-native';
 
-import { Container, ListItem, Text } from 'native-base';
+import { Container, ListItem, Thumbnail, Body, Right, Text } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 
-export default class SocketListItem extends React.Component {
-  state = {
-    showSlider : false
-  }
-  constructor(props) {
-    super(props);
-    this._toggleSlider = this._toggleSlider.bind(this);
-    this._setBrightness = this._setBrightness.bind(this);
-  }
-  _setBrightness(newBrightness) {
-    console.log(`Set socket:${this.props.name} to brightness:${newBrightness}`);
-  }
-  _toggleSlider() {
-    this.setState({ showSlider : !this.state.showSlider });
-  }
+export default class SocketListItem extends React.PureComponent {
   render() {
     return (
-      <ListItem onPress={this._toggleSlider}>
+      <ListItem onPress={this.props.onPress}>
         <Grid>
           <Row>
-            <Text>{this.props.name}</Text>
+            <Thumbnail square small source={{ uri : this.props.iconUrl }} />  
+            <Body>
+              <Text>{this.props.name}</Text>
+            </Body>
+            <Right>
+              <Switch
+                onTintColor="#f1c40f"
+                value={this.props.brightness > 0}
+                onValueChange={_ => {
+                  this.props.setBrightness((this.props.brightness > 0) ? 0 : 50, true);
+                }}/>
+            </Right>
           </Row>
           {
-            this.state.showSlider && (
+            this.props.showSlider && (
               <Row>
                 <Col>
-                  <Slider minimumTrackTintColor='#f1c40f' onSlidingComplete={this._setBrightness.bind(this)}
+                  <Slider
+                  minimumTrackTintColor='#f1c40f'
+                  maximumValue={0}
                   maximumValue={100}
                   step={5}
-                  value={this.props.initialBrightness || 50}
+                  value={this.props.brightness}
+                  onSlidingComplete={v => this.props.setBrightness(v, true)}
                   />
                 </Col>
               </Row>
