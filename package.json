@@ -2,8 +2,8 @@
   "name": "mbl-app",
   "version": "0.0.0",
   "description": "Hello Expo!",
-  "author": null,
-  "license": "",
+  "author": "joshpaulchan <joshpaulchan@gmail.com>",
+  "license": "MIT",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "test": "node ./node_modules/jest/bin/jest.js --watch"
@@ -13,13 +13,14 @@
   },
   "dependencies": {
     "@expo/samples": "^2.0.2",
-    "expo": "^19.0.0",
+    "expo": "^23.0.0",
     "native-base": "^2.3.1",
-    "react": "16.0.0-alpha.12",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-19.0.0.tar.gz",
-    "react-navigation": "^1.0.0-beta.12"
+    "react": "16.0.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-23.0.0.tar.gz",
+    "react-navigation": "^1.0.0-beta.19",
+    "xxhashjs": "^0.2.1"
   },
   "devDependencies": {
-    "jest-expo": "^19.0.5"
+    "jest-expo": "23.0.0"
   }
 }
