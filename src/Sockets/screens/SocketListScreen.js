@@ -19,12 +19,6 @@ export default class SocketListPage extends React.Component {
   // static navigationOptions = {
   //   header: null
   // }
-  state = {
-    sockets: [
-      { name: 'Sockatoa' },
-      { name: 'Sockrates' }
-    ]
-  }
   render() {
     return (
       <Container>
@@ -44,9 +38,7 @@ export default class SocketListPage extends React.Component {
             </Button>
           </Right>
         </Header>
-        <Content>
-          <SocketList sockets={this.state.sockets} />
-        </Content>
+        <SocketList />
       </Container>
     );
   }
