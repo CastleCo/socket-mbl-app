@@ -2,17 +2,23 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Notifications } from 'expo';
 
-import HomeTabNavigator from './HomeTabNavigator';
-import SideMenuNavigator from './SideMenuNavigator';
+import AppNavigator from './AppNavigator';
+import AuthNavigator from './AuthNavigator';
 
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator({
-    Home: { screen: SideMenuNavigator, },
-  }, {
-    header: null
+  Auth: {
+    path: '/auth',
+    screen: AuthNavigator,
+  },
+  App: {
+    path: '/app',
+    screen: AppNavigator
   }
-);
+}, {
+  headerMode: 'none'  
+});
 
 export default class RootNavigator extends React.Component {
   componentDidMount() {
@@ -24,7 +30,7 @@ export default class RootNavigator extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator />;
+    return <RootStackNavigator/>;
   }
 
   _registerForPushNotifications() {

@@ -51,6 +51,5 @@ export default TabNavigator({
     headerRight: MenuButton,
     // initialRouteName : 'Sockets',
     animationEnabled: true,
-    gesturesDisabled: true,
   }
 );
