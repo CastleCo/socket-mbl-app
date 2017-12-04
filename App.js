@@ -2,59 +2,56 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
+
+// custom theme
+import { StyleProvider } from 'native-base';
+import getTheme from './src/native-base-theme/components';
+import theme from './src/native-base-theme/variables/castle';
+
 import RootNavigation from './src/navigation/RootNavigation';
 
 export default class App extends React.Component {
   state = {
-    assetsAreLoaded: false,
+    isLoadingComplete: false,
   };
 
-  componentWillMount() {
-    this._loadAssetsAsync();
-  }
-
   render() {
-    if (!this.state.assetsAreLoaded && !this.props.skipLoadingScreen) {
-      return <AppLoading />;
+    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+      return <AppLoading
+        startAsync={this._loadAssetsAsync}  
+        onError={this._handleLoadingError}
+        onFinish={this._handleFinishLoading}
+      />;
     } else {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' &&
-            <View style={styles.statusBarUnderlay} />}
-          <RootNavigation />
-        </View>
+        <StyleProvider style={getTheme(theme)}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+            <RootNavigation />
+          </View>
+        </StyleProvider>
       );
     }
   }
 
-  async _loadAssetsAsync() {
-    try {
-      // await Promise.all([
-      //   Asset.loadAsync([
-      //     require('./src/assets/images/robot-dev.png'),
-      //     require('./src/assets/images/robot-prod.png'),
-      //   ]),
-      //   Font.loadAsync([
-      //     // This is the font that we are using for our tab bar
-      //     Ionicons.font,
-      //     // We include SpaceMono because we use it in HomeScreen.js. Feel free
-      //     // to remove this if you are not using it in your app
-      //     { 'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf') },
-      //   ]),
-      // ]);
-    } catch (e) {
-      // In this case, you might want to report the error to your error
-      // reporting service, for example Sentry
-      console.warn(
-        'There was an error caching assets (see: App.js), perhaps due to a ' +
-          'network timeout, so we skipped caching. Reload the app to try again.'
-      );
-      console.log(e);
-    } finally {
-      this.setState({ assetsAreLoaded: true });
-    }
+  _loadAssetsAsync = async () => {
+    return Promise.all([
+      Asset.loadAsync([
+        require('./src/assets/images/robot-dev.png'),
+        require('./src/assets/images/robot-prod.png'),
+      ]),
+      Font.loadAsync({
+        // This is the font that we are using for our tab bar
+        ...Ionicons.font,
+        // We include SpaceMono because we use it in HomeScreen.js. Feel free
+        // to remove this if you are not using it in your app
+        'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf'),
+      }),
+    ]);
   }
+  _handleFinishLoading = () => { this.setState({ isLoadingComplete: true }); }
+  _handleLoadingError = (e) => { console.warn(e); }
 }
 
 const styles = StyleSheet.create({
