@@ -8,7 +8,7 @@ export default class PasswordInput extends React.PureComponent {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Input
-          {...this.props}  
+          {...this.props}
           style={{ flex: 1 }}
           autoCorrect={false}
           autoCapitalize='none'
@@ -18,13 +18,13 @@ export default class PasswordInput extends React.PureComponent {
           value={this.props.value}
           onChangeText={this.props.onChangeText}
         />
-        {<TouchableOpacity
+        <TouchableOpacity
           transparent
           style={[styles.button]}
           disabled={isEmpty}
           onPress={_ => this.props.onTogglePassword()}>
           <Text style={[styles.buttonText, (!isEmpty) ? styles.buttonTextEnabled : null ]}>{this.props.showPassword ? 'hide' : 'show'}</Text>
-        </TouchableOpacity>}
+        </TouchableOpacity>
       </View>
     )
   }

@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, TextInput, TouchableHighlight, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { View, TouchableHighlight, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import {
   Container,
   Header,
@@ -24,6 +23,7 @@ import {
 
 import { PasswordInput } from '../components';
 import styles from '../../constants/Colors';
+
 const { primaryColor } = styles;
 
 export default class LoginScreen extends React.Component {
@@ -31,59 +31,49 @@ export default class LoginScreen extends React.Component {
     super(props);
 
     var form =  {
-      email: "admin",
-      password: "admin"
+      email: "",
+      password: ""
     };
     var errors = Object.keys(form).reduce((obj, key) => {
       obj[key] = false; // set all errors false
       return obj;
     }, {});
 
+    console.log(JSON.stringify(errors));
+
     this.state = {
       showPassword: false,
       form,
       errors: (new Map() : Map<string, boolean>),
-      focused: null,
     }
-
-    this._focusNextInput = this._focusNextInput.bind(this);
-
-    // stores refs to the inputs for auto focusing
-    this.inputRefs = {};
   }
   _togglePasswordVisibility = _ => { this.setState({ showPassword: !this.state.showPassword }); }
-  _updatePassword = password => {
+  _updatePassword = (password) => {
     this.setState({
       form: Object.assign(this.state.form, { password })
     });
   }
-  _updateEmail = email => {
+  _updateEmail = (email) => {
     this.setState({ form: Object.assign(this.state.form, { email }) });
   }
-  _focusNextInput = (key) => { this.inputRefs[key].focus(); }
-  _tryLogin = (email, pw) => {
+  _tryRegister = (email, pw) => {
     // send network request for authentication
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (email !== 'admin' && pw !== "admin") return reject({ message: "Sorry" });
+
         // nav to main
-        return resolve({ user: 'admin', accessToken: '42' });
       }, 200);
     });
   }
-  _submitLogin = () => {
-    // submit login information
-    this._tryLogin(this.state.form.email, this.state.form.password)
+  _submitRegister = () => {
+    // submit Register information
+    this._tryRegister(this.state.form.email, this.state.form.password)
       .then((data) => {
         // save auth session
 
         // move into app
-        const action = NavigationActions.reset({
-          index: 0,
-          key: null,
-          actions: [ NavigationActions.navigate({ routeName : 'App' }) ]
-        });
-        this.props.navigation.dispatch(action);
+
       }, (err) => {
         this.setState((state) => {
           const errors = new Map(state.errors);
@@ -94,18 +84,9 @@ export default class LoginScreen extends React.Component {
         })
       })
   }
-  _goToForgotPwScreen = () => {
-    // navigate to forgot pw page
-    this.props.navigation.navigate('ForgotPassword');
-  }
-  _goToRegisterScreen = () => {
-    console.log("Going to registration screen...");
-    // navigate to register page
-    const action = NavigationActions.navigate({
-      routeName: 'Register'
-    });
-    console.log(this.props.navigation);
-    this.props.navigation.dispatch(action);
+  _goToLoginScreen = () => {
+    // navigate to Login page
+    this.props.navigation.goBack();
   }
   render() {
     return (
@@ -120,17 +101,11 @@ export default class LoginScreen extends React.Component {
               <Label style={{ color: "#777"}}>Email</Label>
               <Input
                 placeholder="your.email@website.com"
-                placeholderTextColor="#ccc"
                 autoCapitalize="none"
+                placeholderTextColor="#ccc"
                 keyboardType="email-address"
                 value={this.state.form.email}
                 onChangeText={this._updateEmail}
-                blurOnSubmit={false}
-                returnKeyType="next"
-                ref={input => {
-                  this.inputRefs["email"] = input;
-                }}
-                onSubmitEditing={_ => { this._focusNextInput("pw"); }}
               />
             </Item>
             <Item error={this.state.errors.get('password')} stackedLabel last>
@@ -142,24 +117,16 @@ export default class LoginScreen extends React.Component {
                 onChangeText={this._updatePassword}
                 showPassword={this.state.showPassword}
                 onTogglePassword={this._togglePasswordVisibility}
-                returnKeyType="done"
-                ref={input => (this.inputRefs["pw"] = input)}
-                onSubmitEditing={this._submitLogin}
               />
             </Item>
           </Form>
-          <View style={{ padding: 16, marginBottom: 0 }}>
-            <Button block onPress={this._submitLogin}>
-              <Text>Login</Text>
-            </Button>
-            <Button full transparent onPress={this._goToForgotPwScreen}>
-              <Text>I forgot my password</Text>
-            </Button>  
-          </View>
+          <Button block dark style={{ backgroundColor: primaryColor, margin: 16 }} onPress={this._submitLogin}>
+            <Text>Register</Text>
+          </Button>
         </Content>
         <View>
-          <Button full transparent onPress={this._goToRegisterScreen}>
-            <Text>I don't have an account</Text>
+          <Button full transparent dark onPress={this._goToLoginScreen}>
+            <Text style={{ color: primaryColor }}>I already have an account</Text>
           </Button>  
         </View>  
       </Container>
