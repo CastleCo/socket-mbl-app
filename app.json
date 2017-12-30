@@ -3,7 +3,7 @@
     "name": "mbl-app",
     "description": "No description",
     "slug": "mbl-app",
-    "privacy": "public",
+    "privacy": "unlisted",
     "sdkVersion": "23.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
