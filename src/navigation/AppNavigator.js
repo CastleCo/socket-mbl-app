@@ -1,31 +1,29 @@
 import React from 'react';
 import { DrawerNavigator } from 'react-navigation';
 
-import { AssistantScreen } from '../Assistant/screens';
-import AssistantNavigator from './AssistantNavigator';
+import styles from '../common/native-base-theme/variables/castle';
+const { btnPrimaryColor, brandPrimary } = styles;
+
+import SettingsNavigator from './SettingsNavigator';
 import DeviceTabNavigator from './DeviceTabNavigator';
 
 export default DrawerNavigator({
-  Merlin: {
-    path: '/app/merlin',
-    screen: AssistantScreen, // TODO
-  },
   Devices: {
-    path: '/app/devices',
+    path: '/devices',
     screen: DeviceTabNavigator, // TODO
   },
-  Households: {
-    path: '/app/households',
-    screen: AssistantScreen, // TODO
-  },
-  Logs: {
-    path: '/app/households',
-    screen: AssistantScreen, // TODO
-  },
+  // Households: {
+  //   path: '/households',
+  //   screen: AssistantScreen, // TODO
+  // },
   Settings: {
-    path: '/app/settings',
-    screen: AssistantScreen, // TODO
+    path: '/settings',
+    screen: SettingsNavigator, // TODO
   },
 }, {
-  initialRouteName: 'Merlin',
+    initialRouteName: 'Devices',
+    contentOptions: {
+      activeTintColor: btnPrimaryColor,
+      activeBackgroundColor: brandPrimary
+  }  
 });

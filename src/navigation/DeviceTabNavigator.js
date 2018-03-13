@@ -2,12 +2,10 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigator } from 'react-navigation';
+import { Text } from 'native-base';
 
-import { Header, Title } from 'native-base';
-
-import { MenuButton } from '../components';
-
-import Colors from '../constants/Colors';
+import styles from '../common/native-base-theme/variables/castle';
+const { tabBarTextColor, tabDefaultBg, tabBgColor, activeTab } = styles;
 
 import { SocketListScreen } from '../Sockets/screens';
 
@@ -16,8 +14,8 @@ export default TabNavigator({
     Groups    : { screen: SocketListScreen, },
   },{
     navigationOptions: ({ navigation }) => ({
-      headerTitle: (<Title>{navigation.state.routeName}</Title>),
-      tabBarIcon: ({ focused }) => {
+      tabBarLabel: navigation.state.routeName.toUpperCase(),
+      tabBarIcon: ({ focused, tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
@@ -32,24 +30,26 @@ export default TabNavigator({
               : 'md-albums';
             break;
           default:
-          iconName = Platform.OS === 'ios'
-            ? `ios-alert${focused ? '' : '-outline'}`
-            : 'md-alert';
+            iconName = Platform.OS === 'ios'
+              ? `ios-alert${focused ? '' : '-outline'}`
+              : 'md-alert';
         }
         return (
           <Ionicons
             name={iconName}
             size={28}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+            color={tintColor}
           />
         );
       },
     }),
-    header: Header,
-    headerLeft: MenuButton,
-    headerRight: MenuButton,
-    // initialRouteName : 'Sockets',
+    tabBarOptions: {
+      activeTintColor: activeTab,
+      activeBackgroundColor: "#fff",
+      inactiveTintColor: tabBarTextColor,
+      inactiveBackgroundColor: "#fff",
+    },
+    initialRouteName : 'Sockets',
     animationEnabled: true,
   }
 );
