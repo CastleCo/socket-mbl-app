@@ -5,8 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 // custom theme
 import { StyleProvider } from 'native-base';
-import getTheme from './src/native-base-theme/components';
-import theme from './src/native-base-theme/variables/castle';
+import getTheme from './src/common/native-base-theme/components';
+import theme from './src/common/native-base-theme/variables/castle';
 
 import RootNavigation from './src/navigation/RootNavigation';
 
