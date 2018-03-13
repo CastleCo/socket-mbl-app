@@ -13,9 +13,9 @@ import {
   Text
 } from 'native-base';
 
-import { SocketList } from '../components';
+import { DeviceList } from '../components';
 
-export default class SocketListPage extends React.Component {
+export default class DeviceListPage extends React.Component {
   constructor(props) {
     super(props);
     this._websocket = this._initializeWebsocket("ws://8a4922c1.ngrok.io", "woot");
@@ -96,7 +96,7 @@ export default class SocketListPage extends React.Component {
             </Button>
           </Right>
         </Header>
-        <SocketList
+        <DeviceList
           sockets={this.state.sockets}
           onSetBrightness={this._setBrightness}
           onRefresh={this._refreshList}

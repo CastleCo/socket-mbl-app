@@ -7,5 +7,6 @@ export default StackNavigator({
   Login: { screen: LoginScreen },
   ForgotPassword: { screen: ForgotPasswordScreen },
 }, {
-  headerMode: 'none'  
+    headerMode: 'none',
+    initialRouteName: 'Register'  
 });

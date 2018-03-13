@@ -1,3 +1,3 @@
 
 export { default as SocketListItem } from './SocketListItem.js';
-export { default as SocketList } from './SocketList.js';
+export { default as DeviceList } from './DeviceList.js';

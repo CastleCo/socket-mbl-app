@@ -7,11 +7,11 @@ import { Text } from 'native-base';
 import styles from '../common/native-base-theme/variables/castle';
 const { tabBarTextColor, tabDefaultBg, tabBgColor, activeTab } = styles;
 
-import { SocketListScreen } from '../Sockets/screens';
+import { DeviceListScreen } from '../Devices/screens';
 
 export default TabNavigator({
-    Sockets   : { screen: SocketListScreen, },
-    Groups    : { screen: SocketListScreen, },
+    Devices   : { screen: DeviceListScreen, },
+    Groups    : { screen: DeviceListScreen, },
   },{
     navigationOptions: ({ navigation }) => ({
       tabBarLabel: navigation.state.routeName.toUpperCase(),
@@ -19,7 +19,7 @@ export default TabNavigator({
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Sockets':
+          case 'Devices':
             iconName = Platform.OS === 'ios'
               ? `ios-bulb${focused ? '' : '-outline'}`
               : 'md-bulb';
@@ -49,7 +49,7 @@ export default TabNavigator({
       inactiveTintColor: tabBarTextColor,
       inactiveBackgroundColor: "#fff",
     },
-    initialRouteName : 'Sockets',
+    initialRouteName : 'Devices',
     animationEnabled: true,
   }
 );

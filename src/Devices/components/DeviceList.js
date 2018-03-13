@@ -4,7 +4,7 @@ import { Container, Header, Content, List, ListItem, Text } from 'native-base';
 
 import { SocketListItem } from '.';
 
-export default class SocketList extends React.PureComponent {
+export default class DeviceList extends React.PureComponent {
   constructor(props) {
     super(props);
     
