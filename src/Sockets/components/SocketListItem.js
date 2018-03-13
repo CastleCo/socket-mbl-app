@@ -6,6 +6,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 
 export default class SocketListItem extends React.PureComponent {
   render() {
+    const isOn = this.props.brightness > 0;
     return (
       <ListItem onPress={this.props.onPress}>
         <Grid>
@@ -16,11 +17,11 @@ export default class SocketListItem extends React.PureComponent {
             </Body>
             <Right>
               <Switch
-                onTintColor="#f1c40f"
-                value={this.props.brightness > 0}
+                value={isOn}
                 onValueChange={_ => {
-                  this.props.setBrightness((this.props.brightness > 0) ? 0 : 50, true);
-                }}/>
+                  this.props.setBrightness(isOn ? 0 : 50);
+                }}
+              />
             </Right>
           </Row>
           {
@@ -28,12 +29,11 @@ export default class SocketListItem extends React.PureComponent {
               <Row>
                 <Col>
                   <Slider
-                  minimumTrackTintColor='#f1c40f'
-                  maximumValue={0}
-                  maximumValue={100}
-                  step={5}
-                  value={this.props.brightness}
-                  onSlidingComplete={v => this.props.setBrightness(v, true)}
+                    maximumValue={0}
+                    maximumValue={100}
+                    step={1}  
+                    value={this.props.brightness}
+                    onSlidingComplete={v => this.props.setBrightness(v)}
                   />
                 </Col>
               </Row>
