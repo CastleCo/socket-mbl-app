@@ -4,7 +4,7 @@
     "description": "No description",
     "slug": "mbl-app",
     "privacy": "unlisted",
-    "sdkVersion": "23.0.0",
+    "sdkVersion": "25.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
