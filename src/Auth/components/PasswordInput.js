@@ -17,6 +17,7 @@ export default class PasswordInput extends React.PureComponent {
           clearButtonMode={'always'}
           value={this.props.value}
           onChangeText={this.props.onChangeText}
+          ref={this.props.getRef}
         />
         <TouchableOpacity
           transparent
