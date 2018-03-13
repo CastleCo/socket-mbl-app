@@ -22,8 +22,10 @@ import {
   H1
 } from 'native-base';
 
+import { AuthService } from '../../api';
 import { PasswordInput } from '../components';
-import styles from '../../constants/Colors';
+
+import styles from '../../common/constants/Colors';
 const { primaryColor } = styles;
 
 export default class LoginScreen extends React.Component {
@@ -31,57 +33,55 @@ export default class LoginScreen extends React.Component {
     super(props);
 
     var form =  {
-      email: "admin",
-      password: "admin"
+      email: "",
+      password: ""
     };
-    var errors = Object.keys(form).reduce((obj, key) => {
-      obj[key] = false; // set all errors false
-      return obj;
-    }, {});
 
     this.state = {
       showPassword: false,
       form,
-      errors: (new Map() : Map<string, boolean>),
+      errors: new Map(),
       focused: null,
     }
 
-    this._focusNextInput = this._focusNextInput.bind(this);
+    // initalize auth service
+    this.auth = new AuthService("http://localhost:3000/v1");
 
     // stores refs to the inputs for auto focusing
     this.inputRefs = {};
   }
+  componentWillMount() {
+    // emulate save login
+    this.setState({
+      form: {
+        email: "admin",
+        password: "admin"
+      }
+    });
+  }
   _togglePasswordVisibility = _ => { this.setState({ showPassword: !this.state.showPassword }); }
   _updatePassword = password => {
-    this.setState({
-      form: Object.assign(this.state.form, { password })
+    this.setState((state) => {
+      return { form : Object.assign(state.form, { password }) }
     });
   }
   _updateEmail = email => {
-    this.setState({ form: Object.assign(this.state.form, { email }) });
-  }
-  _focusNextInput = (key) => { this.inputRefs[key].focus(); }
-  _tryLogin = (email, pw) => {
-    // send network request for authentication
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email !== 'admin' && pw !== "admin") return reject({ message: "Sorry" });
-        // nav to main
-        return resolve({ user: 'admin', accessToken: '42' });
-      }, 200);
+    this.setState((state) => {
+      return { form : Object.assign(state.form, { email }) }
     });
   }
+  _focusNextInput = (key) => { this.inputRefs[key].focus(); }
   _submitLogin = () => {
     // submit login information
-    this._tryLogin(this.state.form.email, this.state.form.password)
-      .then((data) => {
+    this.auth.login(this.state.form.email, this.state.form.password)
+      .then(data => {
         // save auth session
 
         // move into app
         const action = NavigationActions.reset({
           index: 0,
           key: null,
-          actions: [ NavigationActions.navigate({ routeName : 'App' }) ]
+          actions: [NavigationActions.navigate({ routeName: 'App' })]
         });
         this.props.navigation.dispatch(action);
       }, (err) => {
@@ -96,16 +96,16 @@ export default class LoginScreen extends React.Component {
   }
   _goToForgotPwScreen = () => {
     // navigate to forgot pw page
+    const now = (new Date()).toString();
+    console.log(`[${now}] navigate screen='ForgotPassword'`);
     this.props.navigation.navigate('ForgotPassword');
   }
   _goToRegisterScreen = () => {
-    console.log("Going to registration screen...");
     // navigate to register page
-    const action = NavigationActions.navigate({
-      routeName: 'Register'
-    });
-    console.log(this.props.navigation);
-    this.props.navigation.dispatch(action);
+    const now = (new Date()).toString();
+    console.log(`[${now}] navigate screen='Register'`);
+    // this.props.navigation.navigate('Register');
+    this.props.navigation.goBack()
   }
   render() {
     return (
@@ -127,9 +127,7 @@ export default class LoginScreen extends React.Component {
                 onChangeText={this._updateEmail}
                 blurOnSubmit={false}
                 returnKeyType="next"
-                ref={input => {
-                  this.inputRefs["email"] = input;
-                }}
+                ref={input => (this.inputRefs["email"] = input)}
                 onSubmitEditing={_ => { this._focusNextInput("pw"); }}
               />
             </Item>
@@ -148,7 +146,7 @@ export default class LoginScreen extends React.Component {
               />
             </Item>
           </Form>
-          <View style={{ padding: 16, marginBottom: 0 }}>
+          <View style={{ padding: 16 }}>
             <Button block onPress={this._submitLogin}>
               <Text>Login</Text>
             </Button>

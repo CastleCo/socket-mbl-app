@@ -23,8 +23,6 @@ import {
 } from 'native-base';
 
 import { PasswordInput } from '../components';
-import styles from '../../constants/Colors';
-const { primaryColor } = styles;
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -37,8 +35,6 @@ export default class LoginScreen extends React.Component {
       obj[key] = false; // set all errors false
       return obj;
     }, {});
-
-    console.log(JSON.stringify(errors));
 
     this.state = {
       showPassword: false,
@@ -61,12 +57,13 @@ export default class LoginScreen extends React.Component {
     });
   }
   _tryResetPassword = (email) => {
+    console.log(`[${(new Date()).toString()}] reset-password email=${email}`);
     // send network request for authentication
     return new Promise((resolve, reject) => {
       // case: empty string
       if (email.trim().length === 0) return reject({ message: "Please enter a valid email." });
 
-      // case: invalid email string
+      // TODO: case: invalid email string
       // if (email is not formatted correctly) return reject({ message: "Please enter a valid email." });
 
       setTimeout(() => {
@@ -75,7 +72,7 @@ export default class LoginScreen extends React.Component {
     });
   }
   _submitResetPassword = () => {
-    // submit ResetPassword information
+    // submit reset passowrd information
     this._tryResetPassword(this.state.form.email)
       .then((resp) => {
         this.setState((state) => {
@@ -95,20 +92,23 @@ export default class LoginScreen extends React.Component {
   }
   _goToLoginScreen = () => {
     // navigate to Login page
+    const user = 'unknown';
+    const now = (new Date()).toString();
+    console.log(`[${now}] navigate user=${user} screen='Login'`);
     this.props.navigation.goBack();
   }
   render() {
     const isDisabled = (this.state.form.email.length === 0);
     return (
       <Container style={{ backgroundColor: "#fff" }}>
-        <Header style={{ backgroundColor: primaryColor }} androidStatusBarColor={primaryColor} iosBarStyle="light-content">
+        <Header>
           <Left>
             <Button light transparent onPress={this._goToLoginScreen}>
               <Icon name="arrow-back"/>  
             </Button>
           </Left>
-          <Body style={{ flex: 4 }}>
-            <Title style={{ color: "#fff" }}>Reset Password</Title>
+          <Body style={{ flex: 3 }}>
+            <Title>Reset Password</Title>
           </Body>
           <Right/>
         </Header>  
@@ -133,13 +133,7 @@ export default class LoginScreen extends React.Component {
               />
             </Item>
           </Form>
-          <Button
-            block
-            dark
-            tintColor={primaryColor}
-            style={[{ margin: 16 }, (isDisabled) ? null : { backgroundColor : primaryColor }]} // remove when primary theme is === primary color
-            onPress={this._submitResetPassword}
-            disabled={isDisabled}>
+          <Button block primary style={{ margin: 16 }} onPress={this._submitResetPassword} disabled={isDisabled}>
             <Text>Send Reset Email</Text>
           </Button>
         </Content>
