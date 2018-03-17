@@ -132,7 +132,7 @@ export default class LoginScreen extends React.Component {
               <Label style={{ color: "#777"}}>Email</Label>
               <Input
                 ref={c => this._inputEmail = c}
-                placeholder="your.email@website.com"
+                placeholder="your@email.com"
                 autoCapitalize="none"
                 placeholderTextColor="#ccc"
                 keyboardType="email-address"
