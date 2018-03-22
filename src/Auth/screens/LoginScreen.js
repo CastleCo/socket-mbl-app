@@ -1,109 +1,44 @@
 import React from 'react';
-import { View, TextInput, TouchableHighlight, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import { NavigationActions } from 'react-navigation';
+import { View, Image } from 'react-native';
 import {
   Container,
-  Header,
-  Title,
-  Left,
-  Right,
-  Grid,
-  Row,
-  Col,
   Content,
-  Form,
-  Item,
-  Input,
-  Label,
+  H1,
   Button,
   Text,
-  Footer,
-  Icon,
-  H1
 } from 'native-base';
 
-import { AuthService } from '../../api';
-import { PasswordInput } from '../components';
+import { Header, LoginForm } from '../components';
+import { loginUser } from '../../actions/auth';
 
-import styles from '../../common/constants/Colors';
-const { primaryColor } = styles;
-
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
-
-    var form =  {
-      email: "",
-      password: ""
-    };
-
-    this.state = {
-      showPassword: false,
-      form,
-      errors: new Map(),
-      focused: null,
-    }
-
-    // initalize auth service
-    this.auth = new AuthService("http://localhost:3000/v1");
-
-    // stores refs to the inputs for auto focusing
-    this.inputRefs = {};
   }
-  componentWillMount() {
-    // emulate save login
-    this.setState({
-      form: {
-        email: "admin",
-        password: "admin"
-      }
+  componentWillReceiveProps(newProps) {
+    if (newProps.authenticated) return this._goToMainScreen()
+  }
+  _goToMainScreen = () => {
+    // TODO: replace once RN-navigation is also handled by redux
+    // upon sucessful register, move them into app
+    const action = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [NavigationActions.navigate({ routeName: 'App' })]
     });
-  }
-  _togglePasswordVisibility = _ => { this.setState({ showPassword: !this.state.showPassword }); }
-  _updatePassword = password => {
-    this.setState((state) => {
-      return { form : Object.assign(state.form, { password }) }
-    });
-  }
-  _updateEmail = email => {
-    this.setState((state) => {
-      return { form : Object.assign(state.form, { email }) }
-    });
-  }
-  _focusNextInput = (key) => { this.inputRefs[key].focus(); }
-  _submitLogin = () => {
-    // submit login information
-    this.auth.login(this.state.form.email, this.state.form.password)
-      .then(data => {
-        // save auth session
-
-        // move into app
-        const action = NavigationActions.reset({
-          index: 0,
-          key: null,
-          actions: [NavigationActions.navigate({ routeName: 'App' })]
-        });
-        this.props.navigation.dispatch(action);
-      }, (err) => {
-        this.setState((state) => {
-          const errors = new Map(state.errors);
-          // set errors on
-          errors.set('email', true);
-          errors.set('password', true);
-          return { errors };
-        })
-      })
+    this.props.navigation.dispatch(action);
   }
   _goToForgotPwScreen = () => {
+    // TODO: replace once RN-navigation is also handled by redux
     // navigate to forgot pw page
-    const now = (new Date()).toString();
-    console.log(`[${now}] navigate screen='ForgotPassword'`);
     this.props.navigation.navigate('ForgotPassword');
   }
   _goToRegisterScreen = () => {
+    // TODO: replace once RN-navigation is also handled by redux
     // navigate to register page
-    const now = (new Date()).toString();
-    console.log(`[${now}] navigate screen='Register'`);
     // this.props.navigation.navigate('Register');
     this.props.navigation.goBack()
   }
@@ -111,56 +46,41 @@ export default class LoginScreen extends React.Component {
     return (
       <Container style={{ backgroundColor: "#fff"}}>
         <Content>
-          <View style={{ alignItems : 'center', justifyContent: 'center', height: 256, marginTop: 32 }}>
-            <Image style={{ width: 128, height: 128 }} source={require('../../assets/icons/app-icon.png')} />
-            <H1 style={{ fontWeight: "700", color: primaryColor }}>CASTLE</H1>
-          </View>
-          <Form>
-            <Item error={this.state.errors.get('email')} stackedLabel>
-              <Label style={{ color: "#777"}}>Email</Label>
-              <Input
-                placeholder="your.email@website.com"
-                placeholderTextColor="#ccc"
-                autoCapitalize="none"
-                keyboardType="email-address"
-                value={this.state.form.email}
-                onChangeText={this._updateEmail}
-                blurOnSubmit={false}
-                returnKeyType="next"
-                ref={input => (this.inputRefs["email"] = input)}
-                onSubmitEditing={_ => { this._focusNextInput("pw"); }}
-              />
-            </Item>
-            <Item error={this.state.errors.get('password')} stackedLabel last>
-              <Label style={{ color: "#777"}}>Password</Label>
-              <PasswordInput
-                placeholder="password"
-                placeholderTextColor="#ccc"
-                value={this.state.form.password}
-                onChangeText={this._updatePassword}
-                showPassword={this.state.showPassword}
-                onTogglePassword={this._togglePasswordVisibility}
-                returnKeyType="done"
-                ref={input => (this.inputRefs["pw"] = input)}
-                onSubmitEditing={this._submitLogin}
-              />
-            </Item>
-          </Form>
-          <View style={{ padding: 16 }}>
-            <Button block onPress={this._submitLogin}>
-              <Text>Login</Text>
-            </Button>
-            <Button full transparent onPress={this._goToForgotPwScreen}>
-              <Text>I forgot my password</Text>
-            </Button>  
-          </View>
+          <Header height={256} />
+          <LoginForm
+            onSubmit={this.props.onLogin}  
+            errors={this.props.formErrors}
+          />
+          <Button full transparent onPress={this._goToForgotPwScreen}>
+            <Text>I forgot my password</Text>
+          </Button>
         </Content>
-        <View>
-          <Button full transparent onPress={this._goToRegisterScreen}>
-            <Text>I don't have an account</Text>
-          </Button>  
-        </View>  
+        <Button full transparent onPress={this._goToRegisterScreen}>
+          <Text>I don't have an account</Text>
+        </Button>
       </Container>
     )
   }
 }
+
+LoginScreen.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  formErrors: PropTypes.instanceOf(Map).isRequired,
+  onLogin: PropTypes.func.isRequired
+}
+
+const mapStateToProps = (state) => ({
+  authenticated: state.authenticated,
+  formErrors: state.formErrors || new Map()
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onLogin: ({ email, password }) => {
+    dispatch(loginUser(email, password));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginScreen)
