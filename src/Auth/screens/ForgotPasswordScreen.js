@@ -22,8 +22,6 @@ import {
   H1
 } from 'native-base';
 
-import { PasswordInput } from '../components';
-
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -57,44 +55,41 @@ export default class LoginScreen extends React.Component {
     });
   }
   _tryResetPassword = (email) => {
-    console.log(`[${(new Date()).toString()}] reset-password email=${email}`);
-    // send network request for authentication
-    return new Promise((resolve, reject) => {
-      // case: empty string
-      if (email.trim().length === 0) return reject({ message: "Please enter a valid email." });
+    // console.log(`[${(new Date()).toString()}] reset-password email=${email}`);
+    // // send network request for authentication
+    // return new Promise((resolve, reject) => {
+    //   // case: empty string
+    //   if (email.trim().length === 0) return reject({ message: "Please enter a valid email." });
 
-      // TODO: case: invalid email string
-      // if (email is not formatted correctly) return reject({ message: "Please enter a valid email." });
+    //   // TODO: case: invalid email string
+    //   // if (email is not formatted correctly) return reject({ message: "Please enter a valid email." });
 
-      setTimeout(() => {
-        resolve({ ok: true, message: "If we had an account with that email, we sent an email to reset your password." });
-      }, 200);
-    });
+    //   setTimeout(() => {
+    //     resolve({ ok: true, message: "If we had an account with that email, we sent an email to reset your password." });
+    //   }, 200);
+    // });
   }
   _submitResetPassword = () => {
     // submit reset passowrd information
-    this._tryResetPassword(this.state.form.email)
-      .then((resp) => {
-        this.setState((state) => {
-          const messages = new Map(state.messages);
-          // set errors on
-          messages.set('email', resp.message);
-          return { messages };
-        })
-      }, (err) => {
-        this.setState((state) => {
-          const errors = new Map(state.errors);
-          // set errors on
-          errors.set('email', err.message);
-          return { errors };
-        })
-      })
+    // this._tryResetPassword(this.state.form.email)
+    //   .then((resp) => {
+    //     this.setState((state) => {
+    //       const messages = new Map(state.messages);
+    //       // set errors on
+    //       messages.set('email', resp.message);
+    //       return { messages };
+    //     })
+    //   }, (err) => {
+    //     this.setState((state) => {
+    //       const errors = new Map(state.errors);
+    //       // set errors on
+    //       errors.set('email', err.message);
+    //       return { errors };
+    //     })
+    //   })
   }
   _goToLoginScreen = () => {
     // navigate to Login page
-    const user = 'unknown';
-    const now = (new Date()).toString();
-    console.log(`[${now}] navigate user=${user} screen='Login'`);
     this.props.navigation.goBack();
   }
   render() {
@@ -104,17 +99,17 @@ export default class LoginScreen extends React.Component {
         <Header>
           <Left>
             <Button light transparent onPress={this._goToLoginScreen}>
-              <Icon name="arrow-back"/>  
+              <Icon name="arrow-back"/>
             </Button>
           </Left>
           <Body style={{ flex: 3 }}>
             <Title>Reset Password</Title>
           </Body>
           <Right/>
-        </Header>  
+        </Header>
         <Content>
           <View style={{ padding : 16}}>
-            {this.state.errors.get('email') && <Text style={{ textAlign: 'center', color: '#ff0000' }}>{this.state.errors.get('email')}</Text>}
+            {this.state.errors.get('email') && <Text style={{ textAlign: 'center', color: '#e22' }}>{this.state.errors.get('email')}</Text>}
             {this.state.messages.get('email') && <Text style={{ textAlign: 'center' }}>{this.state.messages.get('email')}</Text>}
           </View>
           <Form>
