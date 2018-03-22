@@ -79,7 +79,7 @@ export default class LoginForm extends React.Component {
           />
         </Item>
         <Button block primary style={{ margin: 16 }} onPress={this._submitForm} disabled={this.state.awaitingResponse}>
-          <Text>Register</Text>
+          <Text>Login</Text>
         </Button>
       </Form>
     )
