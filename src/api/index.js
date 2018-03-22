@@ -1,2 +1,6 @@
 
-export { default as AuthService } from './Auth.service';
+import * as AuthService from './Auth.service';
+
+export default {
+  AuthService
+}
