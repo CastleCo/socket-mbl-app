@@ -11,13 +11,8 @@ import {
 import { NavigationActions } from "react-navigation";
 import { connect } from "react-redux";
 
-
-// import { AuthService } from '../../api';
 import { registerUser } from "../../actions/auth";
-import { RegisterForm } from '../components';
-
-import styles from '../../common/constants/Colors';
-const { primaryColor } = styles;
+import { Header, RegisterForm } from '../components';
 
 class RegisterScreen extends React.Component {
   constructor(props) {
@@ -45,10 +40,7 @@ class RegisterScreen extends React.Component {
     return (
       <Container style={{ backgroundColor: "#fff" }}>
         <Content>
-          <View style={{ alignItems: 'center', justifyContent: 'center', height: 192, marginTop: 32 }}>
-            <Image style={{ width: 128, height: 128 }} source={require('../../assets/icons/app-icon.png')} />
-            <H1 style={{ fontWeight: "700", color: primaryColor }}>CASTLE</H1>
-          </View>
+          <Header height={192}/>
           <RegisterForm
             onSubmit={this.props.onRegister}
             errors={this.props.formErrors} />
@@ -62,8 +54,9 @@ class RegisterScreen extends React.Component {
 }
 
 RegisterScreen.propTypes = {
+  authenticated: PropTypes.bool,
+  formErrors: PropTypes.instanceOf(Map).isRequired,
   onRegister: PropTypes.func.isRequired,
-  formErrors: PropTypes.instanceOf(Map)
 };
 
 const mapStateToProps = (state) => ({
