@@ -9,7 +9,7 @@ import {
     AUTH_REGISTER_ASYNC,
     AUTH_REGISTER_FAIL
 } from '../actionTypes/auth'
-import api from '../api';
+import { AuthService } from '../api';
 
 export function* tryLoginAsync(action) {
     console.log("attempting login");
@@ -38,12 +38,8 @@ export function* watchTryLoginAsync() {
 }
 
 export function* tryRegisterAsync(action) {
-    console.log("sending registration request...");
-    console.log(api.AuthService);
-    console.log(action.payload);
     try {
-        const resp = yield call(api.AuthService.register, action.payload);
-        console.log("in here");
+        const resp = yield call(AuthService.register, action.payload);
         console.log(resp);
         yield put({
             type: AUTH_REGISTER,

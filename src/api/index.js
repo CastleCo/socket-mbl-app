@@ -1,6 +1,3 @@
+import * as _AuthService from './Auth.service';
 
-import * as AuthService from './Auth.service';
-
-export default {
-  AuthService
-}
+export const AuthService = _AuthService;
