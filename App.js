@@ -10,6 +10,20 @@ import theme from './src/common/native-base-theme/variables/castle';
 
 import RootNavigation from './src/navigation/RootNavigation';
 
+// redux + sagas
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import createSagaMiddleware from "redux-saga";
+import reducer from './src/reducers';
+import rootSaga from "./src/sagas"
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(
+  reducer,
+  applyMiddleware(sagaMiddleware)
+);
+sagaMiddleware.run(rootSaga);
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
@@ -24,13 +38,15 @@ export default class App extends React.Component {
       />;
     } else {
       return (
-        <StyleProvider style={getTheme(theme)}>
-          <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-            <RootNavigation />
-          </View>
-        </StyleProvider>
+        <Provider store={store}>
+          <StyleProvider style={getTheme(theme)}>
+            <View style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+              <RootNavigation />
+            </View>
+          </StyleProvider>
+        </Provider>
       );
     }
   }
