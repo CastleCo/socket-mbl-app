@@ -1,21 +1,15 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Notifications } from 'expo';
+import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 import AppNavigator from './AppNavigator';
 import AuthNavigator from './AuthNavigator';
 
-import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
 const RootStackNavigator = StackNavigator({
-  Auth: {
-    path: '/auth',
-    screen: AuthNavigator,
-  },
-  App: {
-    path: '/app',
-    screen: AppNavigator
-  }
+  Auth: { path: '/auth', screen: AuthNavigator, },
+  App: { path: '/app', screen: AppNavigator }
 }, {
   headerMode: 'none'  
 });
