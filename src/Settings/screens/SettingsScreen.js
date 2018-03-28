@@ -21,6 +21,17 @@ import {
 import { AuthService } from '../../api';
 
 export default class Screen extends React.Component {
+    static navigationOptions = ({ navigation }) => {
+        const params = navigation.state.params || {};
+        return {
+            title: "Settings",
+            headerLeft: (
+                <Button transparent light onPress={params.openDrawer}>
+                    <Icon name="menu" />
+                </Button>
+            )
+        }
+    }
     constructor(props) {
         super(props);
 
@@ -28,7 +39,12 @@ export default class Screen extends React.Component {
             errors: new Map()
         }
 
-        this.auth = new AuthService("http://localhost:3000/v1");
+    }
+    componentWillMount() {
+        // Link the openDrawer fn to the header button
+        this.props.navigation.setParams({
+            openDrawer: () => this.props.navigation.navigate('DrawerOpen')
+        });
     }
     _tryLogout = () => {
         return new Promise((resolve, reject) => {
@@ -41,8 +57,6 @@ export default class Screen extends React.Component {
         // confirm, then submit logout
         this.auth.logout()
             .then((data) => {
-                // save auth session
-
                 // move into app
                 const action = NavigationActions.reset({
                     index: 0,
@@ -72,21 +86,13 @@ export default class Screen extends React.Component {
     render() {
         return (
             <Container>
-                <Header>
-                    <Left>
-                        <Button transparent onPress={this._toggleDrawer}>
-                            <Icon name="menu" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Devices</Title>
-                    </Body>
-                    <Right />
-                </Header>
                 <Content>
                     <List style={{ backgroundColor: "#fff" }}>
                         <Separator bordered><Text>USER ACTIONS</Text></Separator>
                         <ListItem onPress={this._tapLogout}><Text>Log Out</Text></ListItem>
+                        <Separator bordered><Text>EXPO</Text></Separator>
+                        <ListItem onPress={_ => this.props.navigation.navigate('Config')}><Text>See Config </Text></ListItem>
+                        <ListItem onPress={_ => this.props.navigation.navigate('Links')}><Text>See Links</Text></ListItem>
                     </List>
                 </Content>
             </Container>
