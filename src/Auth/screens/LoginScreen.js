@@ -12,12 +12,9 @@ import {
 } from 'native-base';
 
 import { Header, LoginForm } from '../components';
-import { loginUser } from '../../actions/auth';
+import { login } from '../../modules/auth/action-creators';
 
 class LoginScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentWillReceiveProps(newProps) {
     if (newProps.authenticated) return this._goToMainScreen()
   }
@@ -75,12 +72,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onLogin: ({ email, password }) => {
-    dispatch(loginUser(email, password));
-  }
+  onLogin: ({ email, password }) => dispatch(login(email, password))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)
