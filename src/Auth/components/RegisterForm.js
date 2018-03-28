@@ -22,36 +22,27 @@ export default class RegisterForm extends React.Component {
       password: "lmao",
     };
 
-    this.state = {
-      showPassword: false,
-      form,
-      awaitingResponse: false,
-    }
-  }
-  componentWillReceiveProps(newProps) {
-    // reset form button
-    this.setState({ awaitingResponse: false });
+    this.state = { showPassword: false, form };
   }
   _focus = field => this[field]._root.focus()
   _togglePasswordVisibility = _ => {
     this.setState({ showPassword: !this.state.showPassword });
   }
   _updatePassword = password => {
-    this.setState({ form: Object.assign(this.state.form, { password }) });
+    this.setState({ form: { ...this.state.form, password } });
   }
   _updateEmail = email => {
-    this.setState({ form: Object.assign(this.state.form, { email }) });
+    this.setState({ form: { ...this.state.form, email } });
   }
   _updateFirstName = firstName => {
-    this.setState({ form: Object.assign(this.state.form, { firstName }) });
+    this.setState({ form: { ...this.state.form, firstName } });
   }
   _updateLastName = lastName => {
-    this.setState({ form: Object.assign(this.state.form, { lastName }) });
+    this.setState({ form: { ...this.state.form, lastName } });
   }
   _submitForm = _ => {
-    if (this.state.awaitingResponse) return;
-    this.setState({ awaitingResponse: true });
-    this.props.onSubmit(this.state.form)
+    if (this.props.disableSubmit) return;
+    this.props.onSubmit(this.state.form);
   }
   render() {
     return (
@@ -111,7 +102,7 @@ export default class RegisterForm extends React.Component {
             onSubmitEditing={this._submitForm}
           />
         </Item>
-        <Button block primary style={{ margin: 16 }} onPress={this._submitForm} disabled={this.state.awaitingResponse}>
+        <Button block primary style={{ margin: 16 }} onPress={this._submitForm} disabled={this.props.disableSubmit}>
           <Text>Register</Text>
         </Button>
       </Form>
@@ -121,5 +112,6 @@ export default class RegisterForm extends React.Component {
 
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  errors: PropTypes.instanceOf(Map).isRequired
+  errors: PropTypes.instanceOf(Map).isRequired,
+  disableSubmit: PropTypes.bool.isRequired
 }
