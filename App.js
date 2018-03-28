@@ -3,19 +3,19 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
+// redux integration
+import { Provider } from "react-redux";
+import store from "./store";
+
 // custom theme
 import { StyleProvider } from 'native-base';
 import getTheme from './src/common/native-base-theme/components';
 import theme from './src/common/native-base-theme/variables/castle';
 
-import RootNavigation from './src/navigation/RootNavigation';
-import { Provider } from "react-redux";
-import store from "./store";
+import RootScreen from './src/navigation';
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
+  state = { isLoadingComplete: false };
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -31,7 +31,7 @@ export default class App extends React.Component {
             <View style={styles.container}>
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-              <RootNavigation />
+              <RootScreen />
             </View>
           </StyleProvider>
         </Provider>
@@ -44,14 +44,7 @@ export default class App extends React.Component {
       Asset.loadAsync([
         require('./src/assets/images/robot-dev.png'),
         require('./src/assets/images/robot-prod.png'),
-      ]),
-      Font.loadAsync({
-        // This is the font that we are using for our tab bar
-        ...Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
-        'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf'),
-      }),
+      ])
     ]);
   }
   _handleFinishLoading = () => { this.setState({ isLoadingComplete: true }); }
