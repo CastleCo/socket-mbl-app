@@ -2,6 +2,8 @@ import {
   LOGIN,
   LOGIN_REQUESTED,
   LOGIN_FAILED,
+  LOGOUT,
+  LOGOUT_REQUESTED,
   REGISTER,
   REGISTER_REQUESTED,
   REGISTER_FAILED,
@@ -37,6 +39,13 @@ export default authReducer = function (state = initialState, action) {
         isLoggingIn: false,
         authenticated: true,
         user: action.payload.user
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        user: null,
+        authenticated: false,
+        isLoggingIn: false
       };
     default:
       return state;

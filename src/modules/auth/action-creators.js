@@ -4,13 +4,17 @@ import { AuthService } from '../../api';
 
 import { NavigationActions } from "react-navigation";
 import {
+  REGISTER,
+  REGISTER_REQUESTED,
+  REGISTER_FAILED,
+  LOGOUT,
+  LOGOUT_REQUESTED,
   LOGIN,
   LOGIN_REQUESTED,
   LOGIN_FAILED,
-  REGISTER,
-  REGISTER_REQUESTED,
-  REGISTER_FAILED
 } from './action-types';
+
+//// REGISTER
 
 const _register = function (user, accessToken) {
   return { type: REGISTER, payload: { user, accessToken } };
@@ -26,7 +30,6 @@ export const register = function(email, password, firstName, lastName) {
 export const registerRequest = function* (action) {
   try {
     const resp = yield call(AuthService.register, action.payload);
-    console.log(resp);
     yield put(_register(resp.user, resp.accessToken));
 
     // navigate to app
@@ -45,39 +48,66 @@ export const registerRequest = function* (action) {
 };
 
 // Watch for registration attempts
-export const watchTryRegisterAsync = function*() {
+export const watchRegisterRequest = function*() {
   yield takeEvery(REGISTER_REQUESTED, registerRequest);
 };
 
+//// LOGOUT
+
+const _logout = function (user, accessToken) {
+  return { type: LOGOUT };
+}
+
+export const logout = function (email, password) {
+  return { type: LOGOUT_REQUESTED };
+};
+
+export const logoutRequest = function* (action) {
+  // var { resp, err } = yield call(AuthService.login, action.payload); // TODO: refactor to AuthService call
+  console.log("1");
+  // store user in state
+  yield put(_logout());
+  console.log("ay");
+
+  // navigate to app
+  yield put(NavigationActions.navigate({ routeName: 'Auth' }));
+}
+
+export const watchLogoutRequest = function* () {
+  yield takeEvery(LOGOUT_REQUESTED, logoutRequest);
+}
+
+//// LOGIN
+
+const _login = function (user, accessToken) {
+  return { type: LOGIN, payload: { user, accessToken } };
+}
+
 export const login = function (email, password) {
-  console.log("login action");
   return { type: LOGIN_REQUESTED, payload: { email, password } };
 };
 
-export const tryLoginAsync = function* (action) {
-  console.log("attempting login");
+export const loginRequest = function* (action) {
   var { resp, err } = yield call(AuthService.login, action.payload); // TODO: refactor to AuthService call
   if (resp) {
-    yield put({
-      type: LOGIN,
-      payload: { user: resp.user, accessToken: resp.accessToken, refreshToken: resp.refreshToken
-      }
-    });
+    // store user in state
+    yield put(_login(resp.user, resp.accessToken));
+
+    // navigate to app
+    yield put(NavigationActions.navigate({ routeName: 'App' }));
   } else {
-    yield put({
-      type: LOGIN_FAILED,
-      payload: { message: err.message }
-    })
+    yield put({ type: LOGIN_FAILED, payload: { message: err.message } });
   }
 }
 
-export const watchTryLoginAsync = function* () {
-  yield takeEvery(LOGIN_REQUESTED, tryLoginAsync);
+export const watchLoginRequest = function* () {
+  yield takeEvery(LOGIN_REQUESTED, loginRequest);
 }
 
 export default function* authSagas() {
   yield all([
-    watchTryRegisterAsync(),
-    watchTryLoginAsync(),
+    watchRegisterRequest(),
+    watchLogoutRequest(),
+    watchLoginRequest(),
   ]);
 }
