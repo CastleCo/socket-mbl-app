@@ -9,20 +9,8 @@ import getTheme from './src/common/native-base-theme/components';
 import theme from './src/common/native-base-theme/variables/castle';
 
 import RootNavigation from './src/navigation/RootNavigation';
-
-// redux + sagas
-import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import reducer from './src/reducers';
-import rootSaga from "./src/sagas"
-
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-  reducer,
-  applyMiddleware(sagaMiddleware)
-);
-sagaMiddleware.run(rootSaga);
+import store from "./store";
 
 export default class App extends React.Component {
   state = {
