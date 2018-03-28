@@ -1,20 +1,22 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { connect } from "react-redux";
+import { StackNavigator, SwitchNavigator } from 'react-navigation';
 import { Notifications } from 'expo';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
+import { addListener } from "../modules/navigation";
 import AppNavigator from './AppNavigator';
 import AuthNavigator from './AuthNavigator';
 
-
-const RootStackNavigator = StackNavigator({
-  Auth: { path: '/auth', screen: AuthNavigator, },
-  App: { path: '/app', screen: AppNavigator }
+export const RootNavigator = SwitchNavigator({
+  Auth: { path: 'auth', screen: AuthNavigator, },
+  App: { path: 'app', screen: AppNavigator }
 }, {
-  headerMode: 'none'  
+  headerMode: 'none',
+  initialRouteName: 'Auth'
 });
 
-export default class RootNavigator extends React.Component {
+class RootScreen extends React.Component {
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }
@@ -24,7 +26,11 @@ export default class RootNavigator extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator/>;
+    return <RootNavigator navigation={{
+      dispatch: this.props.dispatch,
+      state: this.props.navigation,
+      addListener
+    }} />;
   }
 
   _registerForPushNotifications() {
@@ -46,3 +52,7 @@ export default class RootNavigator extends React.Component {
     );
   };
 }
+
+const mapStateToProps = state => ({ navigation: state.navigation });
+
+export default connect(mapStateToProps)(RootScreen);
