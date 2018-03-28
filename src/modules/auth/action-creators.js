@@ -37,8 +37,9 @@ export const registerRequest = function* (action) {
     //     NavigationActions.navigate({ routeName: 'App' })
     //   ]
     // });
-    // yield put(action);
+    yield put(NavigationActions.navigate({ routeName: 'App' }));
   } catch (err) {
+    console.log(err);
     yield put({ type: AUTH_REGISTER_FAIL, payload: { message: err.message } });
   }
 };
