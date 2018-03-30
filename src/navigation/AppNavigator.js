@@ -8,22 +8,12 @@ import SettingsNavigator from './SettingsNavigator';
 import DeviceTabNavigator from './DeviceTabNavigator';
 
 export default DrawerNavigator({
-  Devices: {
-    path: '/devices',
-    screen: DeviceTabNavigator, // TODO
-  },
-  // Households: {
-  //   path: '/households',
-  //   screen: AssistantScreen, // TODO
-  // },
-  Settings: {
-    path: '/settings',
-    screen: SettingsNavigator, // TODO
-  },
+  Devices: { screen: DeviceTabNavigator },
+  Settings: { screen: SettingsNavigator },
 }, {
-    initialRouteName: 'Devices',
-    contentOptions: {
-      activeTintColor: btnPrimaryColor,
-      activeBackgroundColor: brandPrimary
+  initialRouteName: 'Devices',
+  contentOptions: {
+    activeTintColor: btnPrimaryColor,
+    activeBackgroundColor: brandPrimary
   }  
 });

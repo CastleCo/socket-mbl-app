@@ -9,8 +9,8 @@ import AppNavigator from './AppNavigator';
 import AuthNavigator from './AuthNavigator';
 
 export const RootNavigator = SwitchNavigator({
-  Auth: { path: 'auth', screen: AuthNavigator, },
-  App: { path: 'app', screen: AppNavigator }
+  Auth: { screen: AuthNavigator, },
+  App: { screen: AppNavigator }
 }, {
   headerMode: 'none',
   initialRouteName: 'Auth'
