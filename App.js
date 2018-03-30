@@ -44,7 +44,11 @@ export default class App extends React.Component {
       Asset.loadAsync([
         require('./src/assets/images/robot-dev.png'),
         require('./src/assets/images/robot-prod.png'),
-      ])
+      ]),
+      Font.loadAsync({
+        // This is the font that we are using for our tab bar
+        ...Ionicons.font
+      })
     ]);
   }
   _handleFinishLoading = () => { this.setState({ isLoadingComplete: true }); }
