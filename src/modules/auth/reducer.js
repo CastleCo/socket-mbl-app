@@ -14,7 +14,10 @@ const initialState = {
   authenticated: false,
   isLoggingIn: false,
   isOnboarding: false,
-  form: {}
+  form: {
+    error: {},
+    errors: {}
+  }
 };
 
 export default authReducer = function (state = initialState, action) {
