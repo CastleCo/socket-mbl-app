@@ -24,33 +24,27 @@ export default class LoginForm extends React.Component {
 
     this.state = {
       showPassword: false,
-      form,
-      awaitingResponse: false,
+      form
     }
-  }
-  componentWillReceiveProps(newProps) {
-    // reset form button
-    this.setState({ awaitingResponse: false });
   }
   _focus = field => this[field]._root.focus()
   _togglePasswordVisibility = _ => {
     this.setState({ showPassword: !this.state.showPassword });
   }
-  _updatePassword = password => {
-    this.setState({ form: Object.assign(this.state.form, { password }) });
-  }
   _updateEmail = email => {
-    this.setState({ form: Object.assign(this.state.form, { email }) });
+    this.setState({ form: { ...this.state.form, email } });
+  }
+  _updatePassword = password => {
+    this.setState({ form: { ...this.state.form, password } });
   }
   _submitForm = _ => {
     if (this.state.awaitingResponse) return;
-    this.setState({ awaitingResponse: true });
-    this.props.onSubmit(this.state.form)
+    this.props.onSubmit(this.state.form);
   }
   render() {
     return (
       <Form>
-        <Item error={this.props.errors.get('email')} stackedLabel>
+        <Item error={this.props.errors.hasOwnProperty('email')} stackedLabel>
           <Label style={{ color: "#777" }}>Email</Label>
           <Input
             ref={c => this._inputEmail = c}
@@ -65,7 +59,7 @@ export default class LoginForm extends React.Component {
             blurOnSubmit={false}
           />
         </Item>
-        <Item error={this.props.errors.get('password')} stackedLabel last>
+        <Item error={this.props.errors.hasOwnProperty('password')} stackedLabel last>
           <Label style={{ color: "#777" }}>Password</Label>
           <PasswordInput
             getRef={c => this._inputPassword = c}
@@ -78,7 +72,7 @@ export default class LoginForm extends React.Component {
             onSubmitEditing={this._submitForm}
           />
         </Item>
-        <Button block primary style={{ margin: 16 }} onPress={this._submitForm} disabled={this.state.awaitingResponse}>
+        <Button block primary style={{ margin: 16 }} onPress={this._submitForm} disabled={this.props.disableSubmit}>
           <Text>Login</Text>
         </Button>
       </Form>
@@ -88,5 +82,6 @@ export default class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  errors: PropTypes.instanceOf(Map).isRequired
+  errors: PropTypes.object.isRequired,
+  disableSubmit: PropTypes.bool.isRequired
 }

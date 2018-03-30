@@ -47,7 +47,7 @@ export default class RegisterForm extends React.Component {
   render() {
     return (
       <Form>
-        <Item error={this.props.errors.get('firstName')} stackedLabel>
+        <Item error={this.props.errors.hasOwnProperty('firstName')} stackedLabel>
           <Label style={{ color: "#777" }}>First Name</Label>
           <Input
             placeholder="Malcolm"
@@ -60,7 +60,7 @@ export default class RegisterForm extends React.Component {
             blurOnSubmit={false}
           />
         </Item>
-        <Item error={this.props.errors.get('lastName')} stackedLabel>
+        <Item error={this.props.errors.hasOwnProperty('lastName')} stackedLabel>
           <Label style={{ color: "#777" }}>Last Name</Label>
           <Input
             ref={c => this._inputLastName = c}
@@ -74,7 +74,7 @@ export default class RegisterForm extends React.Component {
             blurOnSubmit={false}
           />
         </Item>
-        <Item error={this.props.errors.get('email')} stackedLabel>
+        <Item error={this.props.errors.hasOwnProperty('email')} stackedLabel>
           <Label style={{ color: "#777" }}>Email</Label>
           <Input
             ref={c => this._inputEmail = c}
@@ -89,7 +89,7 @@ export default class RegisterForm extends React.Component {
             blurOnSubmit={false}
           />
         </Item>
-        <Item error={this.props.errors.get('password')} stackedLabel last>
+        <Item error={this.props.errors.hasOwnProperty('password')} stackedLabel last>
           <Label style={{ color: "#777" }}>Password</Label>
           <PasswordInput
             getRef={c => this._inputPassword = c}
@@ -112,6 +112,6 @@ export default class RegisterForm extends React.Component {
 
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  errors: PropTypes.instanceOf(Map).isRequired,
+  errors: PropTypes.object.isRequired,
   disableSubmit: PropTypes.bool.isRequired
 }

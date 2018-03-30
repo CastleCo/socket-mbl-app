@@ -9,13 +9,14 @@ import {
   Text,
 } from 'native-base';
 import { NavigationActions } from "react-navigation";
+import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 
 import { register } from "../../modules/auth/action-creators";
 import { Header, RegisterForm } from '../components';
 
 const RegisterScreen = props => {
-  const { onRegister, formErrors, awaitingResponse, goToLoginScreen } = props;
+  const { formErrors, awaitingResponse, onRegister, goToLoginScreen } = props;
   return (
     <Container style={{ backgroundColor: "#fff" }}>
       <Content>
@@ -34,23 +35,23 @@ const RegisterScreen = props => {
 }
 
 RegisterScreen.propTypes = {
-  formErrors: PropTypes.instanceOf(Map).isRequired,
+  formErrors: PropTypes.object.isRequired,
   awaitingResponse: PropTypes.bool.isRequired,
   onRegister: PropTypes.func.isRequired,
   goToLoginScreen: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  formErrors: state.auth.form.errors || new Map(),
+  formErrors: state.auth.form.errors,
   awaitingResponse: state.auth.isLoggingIn,
 })
 
-const mapDispatchToProps = dispatch => ({
-  onRegister: ({email, password, firstName, lastName}) => {
-    dispatch(register(email, password, firstName, lastName));
-  },
-  goToLoginScreen: _ =>
-    dispatch(NavigationActions.navigate({ routeName: 'Login' })),
-});
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    onRegister: form => register(form.email, form.password, form.firstName, form.lastName),
+    goToLoginScreen: _ => NavigationActions.navigate({ routeName: 'Login' }),
+    goBackToLoginScreen: _ => NavigationActions.navigate({ routeName: 'Login' })
+  }, dispatch);
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen)
