@@ -3,16 +3,17 @@ import { all } from "redux-saga/effects";
 
 import { authSagas, authReducer } from "./auth";
 import { navigationReducer } from "./navigation";
-
-console.log(navigationReducer);
+import { deviceSagas, deviceReducer } from "./devices";
 
 export const rootSaga = function* () {
   yield all([
-    authSagas()
+    authSagas(),
+    deviceSagas()
   ])
 }
 
 export const rootReducer = combineReducers({
   navigation: navigationReducer,
-  auth: authReducer
+  auth: authReducer,
+  devices: deviceReducer
 });
