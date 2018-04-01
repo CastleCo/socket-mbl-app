@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import {
   Container,
   Header,
@@ -13,97 +14,83 @@ import {
   Text
 } from 'native-base';
 
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { NavigationActions } from "react-navigation";
+
 import { DeviceList } from '../components';
+import { getMoreDevices } from '../../modules/devices/action-creators';
 
-export default class DeviceListPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this._websocket = this._initializeWebsocket("ws://8a4922c1.ngrok.io", "woot");
+const INITIAL_FETCH_AMOUNT = 30; // number of devices to fetch upon page load
+const FETCH_AMOUNT = 15; // number of devices to fetch upon end of page reached
 
-    this.state = {
-      refreshing: false,
-      sockets: []
-    }
+class DeviceListPage extends React.Component {
+  static navigationOptions = {
+    drawerLabel: 'Appliances',
+    drawerIcon: ({ tintColor }) => <Icon name="home" color={tintColor}/>,
   }
-  _initializeWebsocket = (url, accessToken) => {
-    var ws = new WebSocket(`${url}?access_token=${accessToken}`);
-    ws.onmessage = evt => { console.log(evt); };
-    return ws;
-  }
-  _toggleDrawer = () => { this.props.navigation.navigate('DrawerToggle'); }
-  _get = (page, count) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(require('./sockets.json').slice(0, (page + 1)*count));
-      }, 200)
-    });
-  }
-  _tryRefresh = () => { return this._get(0, 50); }
-  _refreshList = (evt) => {
-    this.setState({ refreshing: true });
-    this._tryRefresh()
-      .then(sockets => {
-        this.setState({
-          sockets, refreshing: false
-        });
-      })
-      .catch(err => {
-        console.error(err);
-        this.setState({ refreshing: false });
-      });
-  }
-  componentWillMount() {
-    this._tryRefresh()
-      .then(sockets => {
-        this.setState({ sockets });
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-  _setBrightness = (socket, brightness, emit=true) => {
-    console.log(`set-brightness socket='${socket.name}' brightness=${brightness}`);
-    if (emit) {
-      const data = {
-        channel: 'socket.brightness',
-        action: 'SET',
-        data: { id: socket.id, brightness }
-      };
-      this._websocket.send(JSON.stringify(data));
-    }
-    // update local state
-    var sockets = this.state.sockets.map((skt) => {
-      if (skt.id !== socket.id) return skt;
-      return Object.assign(skt, { brightness });
-    });
-    this.setState({ sockets });
-  }
+  // componentWillMount() {
+  //   if (this.props.devices.length === 0) {
+  //     this.props.getMoreDevices(INITIAL_FETCH_AMOUNT, this.props.numDevices);
+  //   }
+  // }
   render() {
     return (
       <Container>
-        <Header searchBar={true}>
+        <Header>
           <Left>
-            <Button transparent onPress={this._toggleDrawer}>
+            <Button transparent onPress={this.props.toggleDrawer}>
               <Icon name="menu" />
             </Button>
           </Left>
           <Body>
-            <Title>Devices</Title>
+            <Title>Appliances</Title>
           </Body>
           <Right>
-            <Button transparent>
+            {/* <Button transparent>
               <Icon name="add" />
-            </Button>
+            </Button> */}
           </Right>
         </Header>
         <DeviceList
-          sockets={this.state.sockets}
-          onSetBrightness={this._setBrightness}
-          onRefresh={this._refreshList}
-          refreshing={this.state.refreshing}
-          onEndReached={this._refreshList}
+          devices={this.props.devices}
+          // onRefresh={this.props.refreshDeviceList}
+          // refreshing={this.props.isRefreshingDeviceList}
+          onEndReached={_ => {
+            this.props.getMoreDevices(FETCH_AMOUNT, this.props.numDevices)
+          }}
+          onSetBrightness={this.props.setDeviceBrightness}
+          onSetPower={this.props.setDevicePower}
         />
       </Container>
     );
   }
 }
+
+DeviceListPage.propTypes = {
+  toggleDrawer: PropTypes.func.isRequired,
+  devices: PropTypes.array.isRequired,
+  isRefreshingDeviceList: PropTypes.bool.isRequired,
+  refreshDeviceList: PropTypes.func.isRequired,
+  getMoreDevices: PropTypes.func.isRequired,
+  setDeviceBrightness: PropTypes.func.isRequired,
+  setDevicePower: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  devices: state.devices.devices,
+  numDevices: state.devices.numDevices,
+  isRefreshingDeviceList: false,
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    toggleDrawer: _ => NavigationActions.navigate({ routeName: 'DrawerToggle' }),
+    getMoreDevices,
+    refreshDeviceList: _ => null, // TODO
+    setDeviceBrightness: deviceId => null,  // TODO
+    setDevicePower: deviceId => null, // TODO
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceListPage);
