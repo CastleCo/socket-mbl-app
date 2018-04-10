@@ -35,8 +35,8 @@ export const registerRequest = function* (action) {
     yield put(_register(resp.user, resp.accessToken));
     // move into app
     yield put(NavigationActions.navigate({ routeName: 'App' }));
-  } catch (err) {
-    yield put({type: AUTH_REGISTER_FAIL, error: err });
+  } catch (error) {
+    yield put({type: REGISTER_FAILED, payload: { error } });
   }
 };
 
@@ -86,7 +86,7 @@ export const loginRequest = function* (action) {
     // navigate to app
     yield put(NavigationActions.navigate({ routeName: 'App' }));
   } catch (error) {
-    yield put({ type: LOGIN_FAILED, error });
+    yield put({ type: LOGIN_FAILED, payload: { error } });
   }
 }
 

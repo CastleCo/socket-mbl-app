@@ -21,7 +21,6 @@ const initialState = {
 };
 
 export default authReducer = function (state = initialState, action) {
-  console.log(action);
   switch (action.type) {
     case REGISTER_REQUESTED:
     case LOGIN_REQUESTED:
@@ -36,8 +35,8 @@ export default authReducer = function (state = initialState, action) {
         isLoggingIn: false,
         form: {
           ...state.form,
-          errors: action.errors,
-          error: action.error
+          errors: action.payload.errors || {},
+          error: action.payload.error || {}
         }
       }; 
     case REGISTER:
