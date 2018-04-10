@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 // custom theme
-import { StyleProvider } from 'native-base';
+import { StyleProvider, Root } from 'native-base';
 import getTheme from './src/common/native-base-theme/components';
 import theme from './src/common/native-base-theme/variables/castle';
 
@@ -28,11 +28,11 @@ export default class App extends React.Component {
       return (
         <Provider store={store}>
           <StyleProvider style={getTheme(theme)}>
-            <View style={styles.container}>
+            <Root style={styles.container}>
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
               {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
               <RootScreen />
-            </View>
+            </Root>
           </StyleProvider>
         </Provider>
       );
