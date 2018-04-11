@@ -18,31 +18,27 @@ const _SocketListItemExtras = ({ brightness, setBrightness }) => {
   )
 }
 
-const _SocketListItem = (props) => {
-  const { onPress, setBrightness, setPower, expanded, name, iconUrl, attributes, brightness } = props;
-  const isOn = brightness > 0;
-  return (
-    <ListItem onPress={onPress}>
-      <Grid>
-        <Row>
-          <Thumbnail square small source={{ uri: iconUrl }} />
-          <Body>
-            <Text>{name}</Text>
-          </Body>
-          <Right>
-            <Switch value={isOn} onValueChange={_ => { setPower(!isOn); } } />
-          </Right>
-        </Row>
-        <Row>
-          { expanded && _SocketListItemExtras({ brightness, setBrightness }) }
-        </Row>
-      </Grid>
-    </ListItem>
-  )
-}
-
 export default class SocketListItem extends React.PureComponent {
   render() {
-    return _SocketListItem(this.props);
+    const { onPress, setBrightness, setPower, expanded, name, iconUrl, attributes, brightness } = this.props;
+    const isOn = brightness > 0;
+    return (
+      <ListItem onPress={onPress}>
+        <Grid>
+          <Row>
+            <Thumbnail square small source={{ uri: iconUrl }} />
+            <Body>
+              <Text>{name}</Text>
+            </Body>
+            <Right>
+              <Switch value={isOn} onValueChange={_ => setPower(!isOn) } />
+            </Right>
+          </Row>
+          <Row>
+            { expanded && _SocketListItemExtras({ brightness, setBrightness }) }
+          </Row>
+        </Grid>
+      </ListItem>
+    );
   }
 }
