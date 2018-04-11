@@ -1,42 +1,56 @@
+const API_ROOT_URL = require('../../config.json').API_ROOT_URL;
 
-const ROOT_URL = "/";
+const headers = {
+  'Content-Type': 'application/json',
+  'Accepts': 'application/json'
+};
 
 // Logs a user into the app
 // 
-// @params      String      email       the email of the user trying to login
-// @params      String      password    the password of the user trying to login
+// @params      Object      params    details of user logging in
+//    String      params.email        the email of the user trying to login
+//    String      params.password     the password of the user trying to login
 // @returns     Promise     
 //  resolves on successful credential combination
 //  rejects on incorrect combination
 export function login({ email, password }) {
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        user: { id: 42, email },
-        accessToken: '42',
-      });
-    }, 200);
-  });
+    return fetch(`${API_ROOT_URL}/auth/login`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ email, password })
+    })
+      .then(raw => {
+        if (raw.ok && raw.status < 400) return raw.json();
+        else reject({ message: "Error requesting from server." });
+      })
+      .then(resolve)
+      .catch(reject);
+  })
 }
 
 // Registers a user
 // 
-// @params      String      email       the email of the user registering
-// @params      String      password    the password of the user registering 
-// @params      String      firstName   the first name of the user registering
-// @params      String      lastName    the last name of the user registering
+// @params      Object      params    details of user registering
+//    String      params.email       the email of the user registering
+//    String      params.password    the password of the user registering 
+//    String      params.firstName   the first name of the user registering
+//    String      params.lastName    the last name of the user registering
 // @returns     Promise     
 //  resolves on successful validation and creation of user
 //  rejects on incorrect combination
 export function register({ email, password, firstName, lastName }) {
-  console.log("sending fetch");
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        user: { id: 42, email, firstName, lastName },
-        accessToken: "42"
-      });
-    }, 1000);
+    return fetch(`${API_ROOT_URL}/auth/register`, {
+      method: "POST",
+      body: JSON.stringify({ email, password, firstName, lastName })
+    })
+      .then(resp => {
+        if (resp.ok && resp.status < 400) return resp.json();
+        else reject({ message: "Error requesting from server." });
+      })
+      .then(resolve)
+      .catch(reject);
   });
 }
 
@@ -53,11 +67,10 @@ export function isLoggedIn() {
 
 // Logs the user out of the application
 // 
-// @desc        Drops the associated acess and refresh tokens
+// @desc        Drops the associated access and refresh tokens
 // 
 // @returns     null
 export function logout() {
-  console.log(`[${(new Date()).toString()}] logout user=${this.user.id}`);
   return new Promise((resolve, reject) => {
     resolve({ ok: true });
   });
