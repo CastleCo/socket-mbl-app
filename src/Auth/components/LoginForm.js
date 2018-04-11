@@ -15,12 +15,7 @@ export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 
-    const form = {
-      firstName: "Joshua Paul",
-      lastName: "Chan",
-      email: "joshpaulchan@gmail.com",
-      password: "lmao",
-    };
+    const form = { email: "", password: "" };
 
     this.state = {
       showPassword: false,
