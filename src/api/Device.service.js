@@ -1,5 +1,5 @@
 
-const API_ROOT_URL = "/";
+const API_ROOT_URL = require('../../config.json').API_ROOT_URL;
 const _sockets = require('./sockets.json');
 
 // Gets a page of devices from the
