@@ -1,62 +1,22 @@
 
-export default class Service {
-    constructor(rootUrl) {
-        this.rootUrl = rootUrl;
-    }
-    
-    // Creates a new household
-    //
-    // @param       String      name        the desired name of the household
-    // @returns     Promise
-    //  resolves if the household was successfully created
-    //  rejects with ({ error: "error_type", message: "" }) if there was an error
-    create = (name) => {
-        return new Promise((resolve, reject) => {
-            
-        });
-    }
+const API_ROOT_URL = require('../../config.json').API_ROOT_URL;
+const _households = require('./households.json');
 
-    // TODO: leaves a household
-    // 
-    // @pre     user must be a part of the household
-    leave = (householdId) => {
-        return new Promise((resolve, reject) => {
-            
-        });
-    }
+// Gets a page of devices from the
+export const getHouseholds = ({ count, offset }) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(_households.slice(offset, offset + count));
+    }, 200)
+  });
+}
 
-    // TODO: transfers the ownership of a household
-    // 
-    // @pre     user must be the household owner
-    // 
-    transfer = (householdId) => {
-
-    }
-
-    // TODO: kicks a user out of a household
-    // 
-    // @pre     user performing the kick must be household owner
-    kickOut = (householdId, userId) => {
-
-    }
-
-    // TODO: invites emails to a household
-    // 
-    // @pre     user must have the "can_invite" permission of the household
-    sendInvite = (householdId, emails) => {
-    }
-
-    // TODO: rescinds an invite to a household
-    // 
-    // 
-    rescindInvite = (householdId) => {
-
-    }
-
-    // TODO: rejects an invite to a household
-    // 
-    // 
-    rejectInvite = (householdId) => {
-
-    }
+export const getHousehold = ({ householdId }) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const results = _households.filter(h => h.id === householdId);
+      if (results.length > 0) return resolve(results[0]);
+      else return reject({ message: "A household with that ID doesn't exist." });
+    }, 200)
+  });
 }
