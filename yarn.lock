@@ -15,6 +15,10 @@
     lodash "^4.17.4"
     react-native-vector-icons "4.4.2"
 
+"@shoutem/fetch-token-intercept@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@shoutem/fetch-token-intercept/-/fetch-token-intercept-0.2.2.tgz#22d192a2f1adfd472efd4adf91fa8cfbebb08e13"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
