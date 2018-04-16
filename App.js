@@ -29,7 +29,7 @@ export default class App extends React.Component {
         <Provider store={store}>
           <StyleProvider style={getTheme(theme)}>
             <Root style={styles.container}>
-              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" animated={true} />}
               {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
               <RootScreen />
             </Root>
