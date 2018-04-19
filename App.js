@@ -3,6 +3,11 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
+// configure shoutem to intercept fetches, insert token and retry 401'd reqs
+import { configure } from '@shoutem/fetch-token-intercept';
+import fetchConfiguration from './fetch-configuration';
+configure(fetchConfiguration);
+
 // redux integration
 import { Provider } from "react-redux";
 import store from "./store";
