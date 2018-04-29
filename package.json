@@ -9,7 +9,10 @@
     "test": "node ./node_modules/jest/bin/jest.js --watch"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!native-base)/"
+    ]
   },
   "dependencies": {
     "@expo/samples": "^2.0.2",
@@ -26,10 +29,16 @@
     "xxhashjs": "^0.2.1"
   },
   "devDependencies": {
+    "babel-jest": "^22.4.3",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "jest-cli": "^22.4.3",
     "jest-environment-node": "^22.4.3",
-    "jest-expo": "23.0.0"
+    "jest-expo": "23.0.0",
+    "react-dom": "^16.3.2",
+    "react-native-mock": "^0.3.1",
+    "regenerator-runtime": "^0.11.1"
   }
 }
