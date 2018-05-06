@@ -13,18 +13,16 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { NavigationActions } from 'react-navigation';
 
-import { Header, LoginForm } from '../components';
-import { login } from '../../modules/auth/action-creators';
+import { Header, LoginForm, ButtonBlockLink } from '../components';
+import { actions } from '../../modules/auth';
 
-class LoginScreen extends React.Component {
+export class LoginScreen extends React.Component {
   componentWillReceiveProps(newProps) {
     const error = newProps.formError;
-    if (Object.keys(error).length > 0) {
-      Toast.show({ text: error.message, type: "danger" });
-    }
+    if (Object.keys(error).length > 0) newProps.showError(error.message);
   }
   render() {
-    const { formErrors, awaitingResponse, onLogin, goToForgotPwScreen, goBackToLoginScreen } = this.props;
+    const { formErrors, awaitingResponse, onLogin, goToForgotPwScreen, goToRegisterScreen } = this.props;
     return (
       <Container style={{ backgroundColor: "#fff" }}>
         <Content>
@@ -34,13 +32,9 @@ class LoginScreen extends React.Component {
             errors={formErrors}
             disableSubmit={awaitingResponse}
           />
-          <Button full transparent onPress={goToForgotPwScreen}>
-            <Text>I forgot my password</Text>
-          </Button>
+          <ButtonBlockLink onPress={goToForgotPwScreen}>I forgot my password</ButtonBlockLink>
         </Content>
-        <Button full transparent onPress={goBackToLoginScreen}>
-          <Text>I don't have an account</Text>
-        </Button>
+        <ButtonBlockLink onPress={goToRegisterScreen}>I don't have an account</ButtonBlockLink>
       </Container>
     );
   }
@@ -52,7 +46,7 @@ LoginScreen.propTypes = {
   awaitingResponse: PropTypes.bool.isRequired,
   onLogin: PropTypes.func.isRequired,
   goToForgotPwScreen: PropTypes.func.isRequired,
-  goBackToLoginScreen: PropTypes.func.isRequired
+  goToRegisterScreen: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -62,11 +56,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    onLogin: form => login(form.email, form.password),
-    goBackToLoginScreen: _ => NavigationActions.back(),
+  return {
+    ...bindActionCreators({
+    onLogin: form => actions.login(form.email, form.password),
+    goToRegisterScreen: _ => NavigationActions.back(),
     goToForgotPwScreen: _ => NavigationActions.navigate({ routeName: 'ForgotPassword' }),
-  }, dispatch);
+    }, dispatch),
+    showError: message => (Toast.show({ text: message, type: "danger" }))
+  }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
