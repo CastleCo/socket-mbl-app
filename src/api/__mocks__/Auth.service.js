@@ -1,9 +1,8 @@
-const API_ROOT_URL = require('../../config.json').API_ROOT_URL;
+const USERS = require('./users.json');
 
-const headers = {
-  'Content-Type': 'application/json',
-  'Accepts': 'application/json'
-};
+export const filterForEmail = (users, email) => {
+  return users.filter(u => u.email === email);
+}
 
 // Logs a user into the app
 // 
@@ -15,17 +14,16 @@ const headers = {
 //  rejects on incorrect combination
 export function login({ email, password }) {
   return new Promise((resolve, reject) => {
-    return fetch(`${API_ROOT_URL}/auth/login`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ email, password })
-    })
-      .then(raw => {
-        if (raw.ok && raw.status < 400) return raw.json();
-        else reject({ message: "Error requesting from server." });
-      })
-      .then(resolve)
-      .catch(reject);
+    process.nextTick(() => {
+      var users = filterForEmail(USERS, email)
+        .filter(u => u.password === password);
+      if (users.length > 0) {
+        const token = "randomToken";
+        return resolve({ user: users[0], token, refreshToken: token, accessToken: token });
+      } else {
+        return reject({ message: "Incorrect email & password combination." });
+      }
+    });
   })
 }
 
@@ -41,17 +39,26 @@ export function login({ email, password }) {
 //  rejects on incorrect combination
 export function register({ email, password, firstName, lastName }) {
   return new Promise((resolve, reject) => {
-    return fetch(`${API_ROOT_URL}/auth/register`, {
-      method: "POST",
-      body: JSON.stringify({ email, password, firstName, lastName })
-    })
-      .then(resp => {
-        if (resp.ok && resp.status < 400) return resp.json();
-        else reject({ message: "Error requesting from server." });
-      })
-      .then(resolve)
-      .catch(reject);
-  });
+    setTimeout(() => {
+      var users = filterForEmail(USERS, email);
+      if (users.length > 0) {
+        reject({ error: { message: "A user with that email already exists." } });
+      } else {
+        user = {
+          email,
+          password,
+          profile: {
+            firstName,
+            lastName,
+            birthday: "",
+            phoneNumber: ""
+          }
+        };
+        USERS.push(user);
+        return user;
+      }
+    }, 200);
+  })
 }
 
 // Checks whether user is logged in

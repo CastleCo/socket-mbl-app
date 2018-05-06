@@ -1,5 +1,3 @@
-
-const API_ROOT_URL = require('../../config.json').API_ROOT_URL;
 const _households = require('./households.json');
 
 // Gets a page of devices from the
