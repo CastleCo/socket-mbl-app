@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions.login should match the snapshot 1`] = `
+Object {
+  "payload": Object {
+    "email": "USER_EMAIL",
+    "password": "USER_PASSWORD",
+  },
+  "type": "@@AUTH/LOGIN/REQUESTED",
+}
+`;
+
+exports[`actions.register should match the snapshot 1`] = `
+Object {
+  "payload": Object {
+    "email": "USER_EMAIL",
+    "firstName": "USER_FIRSTNAME",
+    "lastName": "USER_LASTNAME",
+    "password": "USER_PASSWORD",
+  },
+  "type": "@@AUTH/REGISTER/REQUESTED",
+}
+`;
+
+exports[`actions.setTokens should match the snapshot 1`] = `
+Object {
+  "accessToken": "REFRESH_TOKEN",
+  "refreshToken": "ACCESS_TOKEN",
+  "type": "@@AUTH/SET_TOKENS",
+}
+`;
+
+exports[`actions.setUser should match the snapshot 1`] = `
+Object {
+  "type": "@@AUTH/SET_USER",
+  "user": "USER",
+}
+`;

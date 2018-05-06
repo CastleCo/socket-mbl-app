@@ -1,75 +1,37 @@
-import {
-  REGISTER,
-  REGISTER_REQUESTED,
-  REGISTER_FAILED,
-  LOGIN,
-  LOGIN_REQUESTED,
-  LOGIN_FAILED,
-  LOGOUT,
-  LOGOUT_REQUESTED,
-} from './action-types';
+import * as actionTypes from './action-types';
 
-const initialState = {
+const blankState = {
   user: null,
   authenticated: false,
   isLoggingIn: false,
-  isOnboarding: false,
-  form: {
-    error: {},
-    errors: {}
-  }
+  form: { error: {}, errors: {} }
 };
+
+const initialState = blankState;
 
 export default authReducer = function (state = initialState, action) {
   switch (action.type) {
-    case REGISTER_REQUESTED:
-    case LOGIN_REQUESTED:
-      return {
-        ...state,
-        isLoggingIn: true,
-      };
-    case REGISTER_FAILED:
-    case LOGIN_FAILED:
+    case actionTypes.REGISTER.REQUESTED:
+    case actionTypes.LOGIN.REQUESTED:
+      return { ...state, isLoggingIn: true };
+    case actionTypes.REGISTER.FAILED:
+    case actionTypes.LOGIN.FAILED:
       return {
         ...state,
         isLoggingIn: false,
         form: {
-          ...state.form,
           errors: action.payload.errors || {},
           error: action.payload.error || {}
         }
       }; 
-    case REGISTER:
+    case actionTypes.REGISTER.SUCCEEDED:
+    case actionTypes.LOGIN.SUCCEEDED:
+    case actionTypes.LOGOUT.SUCCEEDED:
+    case actionTypes.SET_USER:
       return {
-        ...state,
-        isLoggingIn: false,
-        isOnboarding: true,
-        authenticated: true,
-        user: action.payload.user,
-        form: {
-          ...state.form,
-          errors: {},
-          error: {}
-        }
-      };
-    case LOGIN:
-      return {
-        ...state,
-        isLoggingIn: false,
-        authenticated: true,
-        user: action.payload.user,
-        form: {
-          ...state.form,
-          errors: {},
-          error: {}
-        }
-      };
-    case LOGOUT:
-      return {
-        ...state,
-        user: null,
-        authenticated: false,
-        isLoggingIn: false
+        ...blankState,
+        user: action.user,
+        authenticated: (action.user !== null) ? true : false
       };
     default:
       return state;

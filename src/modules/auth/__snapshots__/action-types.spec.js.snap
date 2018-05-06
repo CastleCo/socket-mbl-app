@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auth.actionTypes should match the snapshot 1`] = `
+Object {
+  "LOGIN": Object {
+    "FAILED": "@@AUTH/LOGIN/FAILED",
+    "REQUESTED": "@@AUTH/LOGIN/REQUESTED",
+    "SUCCEEDED": "@@AUTH/LOGIN/SUCCEEDED",
+  },
+  "LOGOUT": Object {
+    "FAILED": "@@AUTH/LOGOUT/FAILED",
+    "REQUESTED": "@@AUTH/LOGOUT/REQUESTED",
+    "SUCCEEDED": "@@AUTH/LOGOUT/SUCCEEDED",
+  },
+  "REGISTER": Object {
+    "FAILED": "@@AUTH/REGISTER/FAILED",
+    "REQUESTED": "@@AUTH/REGISTER/REQUESTED",
+    "SUCCEEDED": "@@AUTH/REGISTER/SUCCEEDED",
+  },
+  "SET_TOKENS": "@@AUTH/SET_TOKENS",
+  "SET_USER": "@@AUTH/SET_USER",
+}
+`;
