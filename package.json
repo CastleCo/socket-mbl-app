@@ -6,13 +6,8 @@
   "license": "MIT",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "node ./node_modules/jest/bin/jest.js --watch"
-  },
-  "jest": {
-    "preset": "jest-expo",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!native-base)/"
-    ]
+    "test": "node ./node_modules/jest/bin/jest.js --watch",
+    "test:rn": "REACT_NATIVE_HIDE_WARNINGS=1 node ./node_modules/jest/bin/jest.js --watch"
   },
   "dependencies": {
     "@expo/samples": "^2.0.2",
